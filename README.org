@@ -1,0 +1,87 @@
+* Zen-mode overview
+zen-mode is Emacs in fullscreen without toolbar and menubar
+the function toggles between previous state of features and zen
+
+I bind zen-mode to f11 like this:
+
+(global-set-key [f11] 'zen-mode)
+
+** bugs
+*** TODO Currently Zen mode cant see the difference between a maximized
+ frame and a fullscreen frame. This is because of a limitation in
+ Emacs, which will be fixed future-ish. The end result is that
+ currently Zen will probably not do what you expect if you enter zen
+ while in a maximized frame. 
+
+ doesnt remember previous window size and position always
+
+*** TODO There are some problems in the Compiz WM, (and maybe other WM:s)
+ regarding fullscreen: When selecting another workspace temporarily
+ and going back, Emacs does not cover the wm panels as it should.
+ This can be resolved with alt-tab a bit, but its annoying.  In
+ Metacity it works well. Maybe Zen could learn to work around these
+ WM:s
+
+** new features
+*** TODO Levels of Zen-ness. Quickly enter zen with different
+ predetermined settings. (c-u NUMBER m-x zen-mode),
+NUMBER is the Zen state. The features for each state is configurable
+
+*** TODO utilize custom-themes
+The custom theme code in Emacs 24 is nicely demonstrated by
+color-themes. Re-use this facility and scrap Zen:s limited in-built
+feature.
+
+themable:
+scroll-bar-mode menu-bar-mode tool-bar-mode 
+
+needs work:
+frame-mode
+
+"Allow more than one theme at a time"
+enable-theme
+custom-theme-load-path
+customize-create-theme
+`:set SETFUNCTION'
+
+although one could have any number of zen-states, I want a couple of
+usable defaults.
+
+**** zen-master
+Zen-master mode, like writeroom mode. 
+it turns all distractions off, including minibuffer.
+**** zen
+no menubor toolbar or scrollbar. fullscreen
+**** zen-light
+maximized
+**** unzen
+    all zen-ness is disabled
+*** TODO forbidden URLs 
+polipoli is a webproxy which has a forbiddenurls feature, which is a
+file with regexps of forbidden urls. zen can handle this with
+customize. The config file will be
+generated and the file reloaded.
+
+each url shall have a zen state. This could possibly be managed as a
+theme variable.
+
+*** TODO advice some modes like ERC so as not to
+  interrupt while in Zen, also dont Gnus while in Zen. You are
+  supposed to concentrate :)
+
+*** TODO procrastination inhibitor. Enter a Zen state  and dont leave until
+ youv'e actually produced someting useful. For instance, 15 minutes
+ must pass and some useful buffer must grow by a number of bytes
+ before you can begin wasting time again.
+
+*** TODO implicit zen state shifting 
+lessening neuralogical procrastenating reward. 
+
+Its easier to describe with an example. You want to Gnus rather than
+do whatever more fruitful endeavor you are doing. Gnus is inhibited in
+your current zen state. However, you don't need to change zen state
+manually to go to a zen state where Gnus is allowed. It is done
+automatically. You do, however, have to suffer a synthetic 30 second
+delay before arriwing in the Gnus buffer. Zen state is changed
+automatically after that. If you quit before the delay expires you
+stay in your current zen state.

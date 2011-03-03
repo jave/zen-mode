@@ -1,52 +1,12 @@
 ;;; zen-mode.el --- remove/restore Emacs frame distractions quickly
 
-;;; Copyright (C) 2008,2009 Joakim Verona
+;;; Copyright (C) 2008,2009,2010,2011 FSF
 
 ;;Author: Joakim Verona, joakim@verona.se
 ;;License: GPL V3 or later
 
 ;;; Commentary:
-;; 
-;;zen-mode is Emacs in fullscreen without toolbar and menubar
-;;the function toggles between previous state of features and zen
-;;
-;;Please see BUG list below if Zen doesnt behave as expected.
-;;
-;;I bind zen-mode to f11 like this:
-;;;(global-set-key [f11] 'zen-mode)
-;;
-;;TODO:
-;;
-;;- BUG: Currently Zen mode cant see the difference between a maximized
-;; frame and a fullscreen frame. This is because of a limitation in
-;; Emacs, which will be fixed future-ish. The end result is that
-;; currently Zen will probably not do what you expect if you enter zen
-;; while in a maximized frame. 
-;;
-;; - BUG: There are some problems in the Compiz WM, (and maybe other WM:s)
-;; regarding fullscreen: When selecting another workspace temporarily
-;; and going back, Emacs does not cover the wm panels as it should.
-;; This can be resolved with alt-tab a bit, but its annoying.  In
-;; Metacity it works well. Maybe Zen could learn to work around these
-;; WM:s
-;;
-;;- Improvement: Zen-master mode, like writeroom mode. (c-u m-x
-;; zen-mode), which isn't customizable, it just turns all distractions
-;; off, including minibuffer.
-;;
-;;- Improvement: Levels of Zen-ness. Quickly enter zen with different
-;; predetermined settings
-;;
-;;- Improvement: Optionaly advice some modes like ERC so as not to
-;;  interrupt while in Zen, also dont Gnus while in Zen. You are
-;;  supposed to concentrate :)
-;;
-;;- Improvement: Optional procrastination inhibitor. Enter Zen and dont leave until
-;; youv'e actually produced someting useful. For instance, 15 minutes
-;; must pass and some useful buffer must grow by a number of bytes
-;; before you can begin wasting time again.
-;;
-;; BUG: doesnt remember previous window size and position always
+;;  See README.org
 
 ;;; History:
 ;; 
@@ -90,7 +50,7 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
    ((eq feature 'tool-bar-mode)
     tool-bar-mode)
    ((eq feature 'frame-mode)
-    (if (eq 'fullboth (frame-parameter nil 'fullboth)) nil t))
+    (if (eq 'fullboth (frame-parameter nil 'fullscreen)) nil t))
    ;emacs seems to assume a maximized window is also "fullboth".
    ;zen-mode needs to make a difference between fullscreen and maximized
  )

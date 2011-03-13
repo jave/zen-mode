@@ -43,19 +43,26 @@ enable-theme
 custom-theme-load-path
 customize-create-theme
 `:set SETFUNCTION'
+custom-theme-visit-theme
 
 although one could have any number of zen-states, I want a couple of
 usable defaults.
 
 **** zen-master
+3
 Zen-master mode, like writeroom mode. 
-it turns all distractions off, including minibuffer.
-**** zen
+it turns all distractions off, including modeline.
+   (setq mode-line-format nil)
+   (setq-default mode-line-format nil)
+**** zen-deep
+2
 no menubor toolbar or scrollbar. fullscreen
 **** zen-light
+1
 maximized
-**** unzen
-    all zen-ness is disabled
+**** zen-wordly
+0
+    all zen-ness is disabled. 
 *** TODO forbidden URLs 
 polipoli is a webproxy which has a forbiddenurls feature, which is a
 file with regexps of forbidden urls. zen can handle this with
@@ -64,6 +71,13 @@ generated and the file reloaded.
 
 each url shall have a zen state. This could possibly be managed as a
 theme variable.
+
+a problem is that the configuration and reload requires root
+privileges on Fedora(and thus probably many other distributions also) 
+
+/etc/polipo/forbidden 
+pgrep polipo|xargs kill -SIGUSR1
+service polipo reload
 
 *** TODO advice some modes like ERC so as not to
   interrupt while in Zen, also dont Gnus while in Zen. You are

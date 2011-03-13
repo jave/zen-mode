@@ -17,10 +17,9 @@
 
 (provide 'zen-mode)
 
-(defvar zen-mode-is-active-p nil "If zen mode is currently active
-or not.")
-(defvar zen-mode-previous-state nil "The state of features to be
-disabled in zen-mode, before entering zen-mode.")
+(defvar zen-mode-is-active-p nil "If zen mode is currently active or not.")
+(defvar zen-mode-previous-state nil
+  "The state of features to be disabled in `zen-mode', before entering `zen-mode'.")
 
 (defgroup zen-mode nil "zen-mode"); :group 'some-apropriate-root-group)
 
@@ -35,8 +34,9 @@ to their previous settings when leaving Zen."
     (const menu-bar-mode)
     (const tool-bar-mode)
     (const frame-mode) ;frame-mode is the inverse of fullscreen, for consistency
-  )
-  )
+    ))
+
+
 
 
 (defun zen-mode-get-feature-state (feature)
@@ -51,10 +51,11 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
     tool-bar-mode)
    ((eq feature 'frame-mode)
     (if (eq 'fullboth (frame-parameter nil 'fullscreen)) nil t))
+   
    ;emacs seems to assume a maximized window is also "fullboth".
    ;zen-mode needs to make a difference between fullscreen and maximized
- )
-  )
+   ))
+
 
 (defun zen-mode-set-feature-state (feature state)
   "Set zen FEATURE to STATE."
@@ -68,18 +69,19 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
      ((eq feature 'tool-bar-mode)
       (tool-bar-mode modeflag))
      ((eq feature 'frame-mode)
-      (zen-frame-mode state))
-    ))
-)
+      (zen-frame-mode state)))))
+
+
 
 (defun zen-frame-mode (state)
-  ;;(message "zen-frame-mode :>>%s<<" state)
+  "STATE set fullscreen."
   (cond
    ;;fullscreen seems to be quirky in some emacsen, this is a feeble workaround
    (state (set-frame-parameter nil 'fullscreen 'fullboth-bug)
           (set-frame-parameter nil 'fullscreen 'nil))
     (t
             (set-frame-parameter nil 'fullscreen 'fullboth))))
+
 
 
 (defun zen-mode-store-state ()
@@ -109,11 +111,11 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
       ((f zen-mode-previous-state))
     (while f
       (zen-mode-set-feature-state (caar  f) (cadar f))
-      (setq f (cdr f))))
-  )
+      (setq f (cdr f)))))
+
 
 (defun zen-mode-hard-unzen ()
-  "hard reset"
+  "Hard reset."
   (zen-mode-set-feature-state 'scroll-bar-mode t)
   (zen-mode-set-feature-state 'menu-bar-mode t)
   (zen-mode-set-feature-state 'tool-bar-mode t)
@@ -137,6 +139,85 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
         (setq zen-mode-is-active-p t)
         (zen-mode-store-state)
         (zen-mode-disable-nonzen-features))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; zen2 will use emacs custom themes
+;; the theme code is not reliable yet
+;; the old and new zen coexist for the time being
+
+(defvar zen-state nil
+  "Current zen state.  nil means no zen.  other states correspond to a theme.")
+
+
+
+(defun zen-set-fullscreen (name state)
+  "Customize setter for fullscreen.  NAME and STATE from customize."
+  (message "zen-set-fullscreen :>>%s<<" state)
+  (setq zen-fullscreen-mode state)
+  (cond
+   ;;fullscreen seems to be quirky in some emacsen, this is a feeble workaround
+   (state   (set-frame-parameter nil 'fullscreen 'fullboth))
+    (t          (set-frame-parameter nil 'fullscreen 'fullboth-bug)
+          (set-frame-parameter nil 'fullscreen 'nil))))
+
+(defcustom zen-fullscreen-mode
+  nil "Make frame fullscreen."
+  :group 'zen-mode
+  :set 'zen-set-fullscreen)
+
+(defcustom zen-encumber-file "/etc/polipo/forbidden/zen-forbidden"
+  "File to store encumberings.  needs to be writable."
+  :group 'zen-mode
+  :type '(string))
+
+
+(defun  zen-set-encumber-urls (name encumber)
+  "Customize setter for encumber urls.  NAME and ENCUMBER from customize."
+  (setq zen-encumbered-urls encumber)
+  (zen-make-encumber-file)
+  (zen-polipo-reload))
+
+(defun zen-make-encumber-file ()
+  "Make the file with encumbered urls for Polipo."
+  (with-temp-file zen-encumber-file
+    (insert (mapconcat (lambda (x) x) zen-encumbered-urls "\n"))))
+
+
+(defcustom zen-polipo-reload-command "curl -m 15 -d 'init-forbidden=Read%20forbidden%20file' http://localhost:8123/polipo/status?"
+  "Command for reloading polipo forbidden file."
+  :group 'zen-mode)
+
+(defun zen-polipo-reload ()
+  "Signal reload to polipo."
+  ;;http://localhost:8123/polipo/status?
+  ;;  post: init-forbidden Read forbidden file
+  ;; there isnt any convenient POST support in emacs so use curl
+  ;;it appears the curl call can hang because polipo can get into a bad state when the network connection changes
+  ;;so theres a 15 sec timeout by default
+  (call-process-shell-command zen-polipo-reload-command))
+
+
+(defcustom zen-encumbered-urls nil
+  "Make it harder to reach urls so you remember not to go there."
+  :group 'zen-mode
+  :type '(repeat string)
+  :set 'zen-set-encumber-urls)
+
+
+
+(defun zen-state-theme (state)
+  "Theme corresponding to zen STATE."
+  (intern (format "zen-%d" state)))
+
+(defun zen-set-state (state)
+  "Which zen STATE to enter."
+  (interactive "Nzen:")
+  (if (equal 0 state) (setq state nil))
+  ;;nil or 0 means a wordly state.
+  ;;other states are themes
+  (if zen-state (disable-theme (zen-state-theme zen-state)))
+  (if state (enable-theme (zen-state-theme state)))
+  (setq zen-state state))
 
 (provide 'zen-mode)
 

@@ -40,7 +40,8 @@
   :set 'zen-set-fullscreen)
 
 (defcustom zen-encumber-file "/etc/polipo/forbidden/zen-forbidden"
-  "File to store encumberings.  needs to be writable."
+  "File to store url encumberings.
+Needs to be writable and Polipo needs to be configured to read it."
   :group 'zen-mode
   :type '(string))
 

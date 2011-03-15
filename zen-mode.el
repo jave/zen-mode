@@ -173,6 +173,7 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
 
 (defun  zen-set-encumber-urls (name encumber)
   "Customize setter for encumber urls.  NAME and ENCUMBER from customize."
+  (message "encumber urls %s" encumber)
   (setq zen-encumbered-urls encumber)
   (zen-make-encumber-file)
   (zen-polipo-reload))
@@ -209,15 +210,19 @@ FEATURE is a symbol from 'zen-mode-what-is-not-zen'."
   "Theme corresponding to zen STATE."
   (intern (format "zen-%d" state)))
 
-(defun zen-set-state (state)
-  "Which zen STATE to enter."
+(defun zen-set-state (new-state)
+  "Which zen NEW-STATE to enter."
   (interactive "Nzen:")
-  (if (equal 0 state) (setq state nil))
+  (if (equal 0 new-state) (setq new-state nil))
   ;;nil or 0 means a wordly state.
   ;;other states are themes
   (if zen-state (disable-theme (zen-state-theme zen-state)))
-  (if state (enable-theme (zen-state-theme state)))
-  (setq zen-state state))
+;;  (if new-state (enable-theme (zen-state-theme new-state)))
+;;enable-theme doesnt work in the way I expected
+;; this works:
+  (if new-state (custom-set-variables '(custom-enabled-themes (append (list (zen-state-theme new-state)) custom-enabled-themes ) t)))
+  
+  (setq zen-state new-state))
 
 (provide 'zen-mode)
 

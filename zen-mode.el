@@ -16,13 +16,16 @@
 
 ;;; Code:
 
+;;??
+;;;###autoload (add-to-list 'custom-theme-load-path load-file-name)
+
 (provide 'zen-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zen v2 uses emacs custom themes which is much cleverer than the old method
 ;; but also more complex to install because you need to copy the zen themes to ~/.emacs.d
 
-(defvar zen-state nil
-  "Current zen state.  nil means no zen.  other states correspond to a theme.")
+(defvar zen-state 0
+  "Current zen state.  0 means no zen.  other states correspond to a theme.")
 
 (defun zen-set-fullscreen (name state)
   "Customize setter for fullscreen.  NAME and STATE from customize."
@@ -83,15 +86,31 @@ Needs to be writable and Polipo needs to be configured to read it."
 (defun zen-set-state (new-state)
   "Which zen NEW-STATE to enter."
   (interactive "Nzen:")
-  (if (equal 0 new-state) (setq new-state nil))
-  ;;nil or 0 means a wordly state.
+  (if (> 0 new-state) (setq new-state 0))
+  (if (>= new-state 3)  (setq new-state 3));;TODO
+  ;; 0 means a wordly state.
   ;;other states are themes
   (if zen-state (disable-theme (zen-state-theme zen-state)))
   ;;  (if new-state (enable-theme (zen-state-theme new-state)))
   ;;enable-theme doesnt work in the way I expected
   ;; this works:
-  (if new-state (custom-set-variables '(custom-enabled-themes (append (list (zen-state-theme new-state)) custom-enabled-themes ) t)))
-  (setq zen-state new-state))
+  (if (>  new-state 0)
+      (custom-set-variables '(custom-enabled-themes (append (list (zen-state-theme new-state)) custom-enabled-themes ) t)))
+  (setq zen-state new-state)
+  (message "Now entering Zen %d" zen-state)
+  )
+
+(defun zen-more ()
+  "more zen. you can do it!"
+  (interactive)
+  (zen-set-state (+ 1 zen-state)))
+
+
+(defun zen-less ()
+  "less zen. the spirit is willing but the flesh is weak."
+  (interactive)
+  (zen-set-state (-  zen-state 1)))
+
 
 (provide 'zen-mode)
 

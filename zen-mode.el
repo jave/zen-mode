@@ -42,6 +42,14 @@
   :group 'zen-mode
   :set 'zen-set-fullscreen)
 
+(defcustom zen-sound-of-one-hand-clapping
+  (lambda () (emms-play-file "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg"))
+  "What does one hand clapping sound like?"
+  :group 'zen-mode
+  :type 'function ;;maybe hoox instead?
+  :set (lambda (name val) (eval val))
+  )
+
 (defcustom zen-encumber-file "/etc/polipo/forbidden/zen-forbidden"
   "File to store url encumberings.
 Needs to be writable and Polipo needs to be configured to read it."

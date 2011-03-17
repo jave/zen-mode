@@ -1,10 +1,11 @@
 * Zen-mode overview
-zen-mode is Emacs in fullscreen without toolbar and menubar
-the function toggles between previous state of features and zen
+zen-mode is Emacs is a concentration aid for Emacs.
 
 I bind zen-mode to f11 like this:
 
-(global-set-key [f11] 'zen-mode)
+(global-set-key [f11] 'zen-set-state)
+
+F11 means full-screen in many applications, and one zen-aspect is fullscreen.
 
 ** bugs
 *** TODO Currently Zen mode cant see the difference between a maximized
@@ -23,11 +24,22 @@ I bind zen-mode to f11 like this:
  WM:s
 
 ** new features
-*** TODO Levels of Zen-ness. Quickly enter zen with different
+*** TODO play trance inducing track with EMMS
+I have my 
+(emms-play-file
+"/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg")
+
+
+*** TODO more states that accumulate
+*** DONE zen-more and zen-less
+    CLOSED: [2011-03-17 Thu 00:16]
+*** DONE Levels of Zen-ness. Quickly enter zen with different
+    CLOSED: [2011-03-15 Tue 23:57]
  predetermined settings. (c-u NUMBER m-x zen-mode),
 NUMBER is the Zen state. The features for each state is configurable
 
-*** TODO utilize custom-themes
+*** DONE utilize custom-themes
+    CLOSED: [2011-03-15 Tue 23:57]
 The custom theme code in Emacs 24 is nicely demonstrated by
 color-themes. Re-use this facility and scrap Zen:s limited in-built
 feature.
@@ -63,7 +75,8 @@ maximized
 **** zen-wordly
 0
     all zen-ness is disabled. 
-*** TODO forbidden URLs 
+*** DONE encumbered URLs 
+    CLOSED: [2011-03-15 Tue 23:57]
 polipoli is a webproxy which has a forbiddenurls feature, which is a
 file with regexps of forbidden urls. zen can handle this with
 customize. The config file will be
@@ -79,6 +92,11 @@ privileges on Fedora(and thus probably many other distributions also)
 pgrep polipo|xargs kill -SIGUSR1
 service polipo reload
 
+
+*** TODO support https encumbering
+polipo can also encumber https urls but that requires a new file + a
+polipo patch entering the polipo repo soonish maybe.
+*** TODO encumbered buffers
 *** TODO advice some modes like ERC so as not to
   interrupt while in Zen, also dont Gnus while in Zen. You are
   supposed to concentrate :)

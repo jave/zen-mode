@@ -44,7 +44,8 @@
 
 (defcustom zen-sound-of-one-hand-clapping
   (lambda () (emms-play-file "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg"))
-  "What does one hand clapping sound like?"
+  "What does one hand clapping sound like?
+Play this sound to enter furhur into Zen."
   :group 'zen-mode
   :type 'function ;;maybe hoox instead?
   :set (lambda (name val) (eval val))
@@ -69,11 +70,11 @@ Needs to be writable and Polipo needs to be configured to read it."
     (insert (mapconcat (lambda (x) x) zen-encumbered-urls "\n"))))
 
 (defcustom zen-polipo-reload-command "curl -m 15 -d 'init-forbidden=Read%20forbidden%20file' http://localhost:8123/polipo/status?"
-  "Command for reloading polipo forbidden file."
+  "Command for reloading Polipo forbidden file."
   :group 'zen-mode)
 
 (defun zen-polipo-reload ()
-  "Signal reload to polipo."
+  "Signal reload to Polipo."
   ;;http://localhost:8123/polipo/status?
   ;;  post: init-forbidden Read forbidden file
   ;; there isnt any convenient POST support in emacs so use curl
@@ -101,23 +102,35 @@ Needs to be writable and Polipo needs to be configured to read it."
   (if zen-state (disable-theme (zen-state-theme zen-state)))
   ;;  (if new-state (enable-theme (zen-state-theme new-state)))
   ;;enable-theme doesnt work in the way I expected
-  ;; this works:
+
+  ;; this works. somewhat.
   (if (>  new-state 0)
-      (custom-set-variables '(custom-enabled-themes (append (list (zen-state-theme new-state)) custom-enabled-themes ) t)))
+      (custom-set-variables (list 'custom-enabled-themes
+                                  (list 'quote (append (list (zen-state-theme new-state)) custom-enabled-themes )) nil)))
+
   (setq zen-state new-state)
   (message "Now entering Zen %d" zen-state)
   )
 
 (defun zen-more ()
-  "more zen. you can do it!"
+  "More Zen. You can do it!"
   (interactive)
   (zen-set-state (+ 1 zen-state)))
 
 
 (defun zen-less ()
-  "less zen. the spirit is willing but the flesh is weak."
+  "Less Zen. The spirit is willing but the flesh is weak."
   (interactive)
   (zen-set-state (-  zen-state 1)))
+
+;;keys
+;;TODO the propor way
+(defun zen-keys ()
+  (global-set-key (kbd "<f11> <f11>") 'zen-set-state)
+  (global-set-key (kbd "<f11> m") 'zen-more)
+  (global-set-key (kbd "<f11> l") 'zen-less)
+  )
+
 
 
 (provide 'zen-mode)

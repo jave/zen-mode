@@ -117,3 +117,22 @@ automatically. You do, however, have to suffer a synthetic 30 second
 delay before arriwing in the Gnus buffer. Zen state is changed
 automatically after that. If you quit before the delay expires you
 stay in your current zen state.
+
+*** TODO customize troubleshoot
+sometimes variables I want in the theme winds up in the customizations.
+*** TODO anti procrastenation timer
+**** DONE [#B] emacs quick challenge timer against procrastination
+   CLOSED: [2009-04-15 Wed]
+i had the idea to do this myself but it was already done.
+http://www.emacswiki.org/emacs/work-timer.el
+depends on todochiku which sends popup msgs with growl, which seemed
+to work immediately.
+
+(require 'work-timer)
+(require 'todochiku)
+(work-timer-start)
+
+**** TODO zen timer
+
+*** TODO control erc state
+busy in higher states etc

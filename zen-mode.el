@@ -95,6 +95,7 @@ Needs to be writable and Polipo needs to be configured to read it."
 (defun zen-set-state (new-state)
   "Which zen NEW-STATE to enter."
   (interactive "Nzen:")
+  (message "Now entering Zen %d" zen-state)  
   (if (> 0 new-state) (setq new-state 0))
   (if (>= new-state 3)  (setq new-state 3));;TODO
   ;; 0 means a wordly state.
@@ -109,7 +110,7 @@ Needs to be writable and Polipo needs to be configured to read it."
                                   (list 'quote (append (list (zen-state-theme new-state)) custom-enabled-themes )) nil)))
 
   (setq zen-state new-state)
-  (message "Now entering Zen %d" zen-state)
+
   )
 
 (defun zen-more ()
@@ -131,7 +132,34 @@ Needs to be writable and Polipo needs to be configured to read it."
   (global-set-key (kbd "<f11> l") 'zen-less)
   )
 
+(defun zen-neurosky-filter (proc string)
+  (when (buffer-live-p (process-buffer proc))
+    (with-current-buffer (process-buffer proc)
+      (let ((moving (= (point) (process-mark proc)))
+            (attention (string-to-number string)))
+        (save-excursion
+          ;;  Insert the text, advancing the process marker.
+          (goto-char (process-mark proc))
+          (insert (format "%d:%s \n" attention (make-string  attention 35)))
 
+          (set-marker (process-mark proc) (point)))
+        (if moving (goto-char (process-mark proc)))))))
+
+
+
+;;interface emacs to the neurosky mindset.
+;;the "synapse" tool is started first, which is a BT->REST adapter
+;; its a bit shaky still. you need to run it twice, 1st to start the adapter, 2nd to start the emacs listener
+(defun zen-neurosky ()
+  (interactive)
+  (let* ((synapse-proc (unless (get-process "zen-synapse")
+                         (start-process-shell-command "zen-synapse" "*zen-synapse*" "/usr/bin/env python /usr/lib/python2.7/site-packages/synapse-gui.py")))
+         (neurosky-proc
+          (start-process-shell-command "zen-neurosky" "*zen-neurosky*" "unbuffer -p nc  localhost 13854 |unbuffer -p  mac2unix |unbuffer -p grep attention |sed 's/.* \\([0-9]*\\)}}.*/\\1/g'"))
+         
+
+         )
+    (set-process-filter neurosky-proc 'zen-neurosky-filter)))
 
 (provide 'zen-mode)
 

@@ -5,7 +5,65 @@ I bind zen-mode to f11 like this:
 
 (global-set-key [f11] 'zen-set-state)
 
-F11 means full-screen in many applications, and one zen-aspect is fullscreen.
+F11 means full-screen in many applications, and one zen-aspect is
+fullscreen.
+
+With zen-mode you bind a set of zen features to a zen state.
+
+Here's the default keybindings:
+
+<f11> l         zen-less
+<f11> m         zen-more
+<f11> <f11>     zen-set-state
+
+So, normaly you load zen-mode, and nothing happens. Then, when you are
+ready to achieve zen, you press <f11> m. Repeat until desired state is
+reached. When you want to descend back into the world <f11> l.
+
+** zen aspects
+Zen states are created using Emacs themes, so you can bind any
+customizable variable value to a zen state. Zen mode adds a couple
+of customizable features.
+
+*** zen-fullscreen-mode. 
+Enter fullscreen. Applications that are not Emacs are not
+Zen. (Although you can cheat and embedded other applications in
+Emacs. See the Emacs Xwidget branch)
+*** zen-encumbered-urls.
+Wordly urls that you can't visit in a Zen state. I use Polipo as a
+http proxy, and Emacs creates rules for it using this feature.
+*** zen-sound-of-one-hand-clapping. 
+A sound of your choosing that helps you achieve Zen. I use a binaural
+beat mixed with the sound of the Shinkhansen train.
+*** standard Emacs features that Zen can set
+Various Emacs decorators that are not Zen:
+  '(scroll-bar-mode nil)
+  '(menu-bar-mode nil)
+  '(tool-bar-mode nil)
+  '(mode-line-format nil))
+
+You can use whatever customizable variable you want.
+
+** default zen themes
+these are the default zen themes:
+
+*** zen 1
+  '(zen-fullscreen-mode t))
+*** zen 2
+  '(scroll-bar-mode nil)
+  '(zen-fullscreen-mode t)
+  '(zen-encumbered-urls  (quote ( "#brief timewastes" "www.penny-arcade.com" "www.dilbert.com" "www.xkcd.com" "www.userfriendly.org" "#news waste" "slashdot.org" "dn.se" "#social timewastes" "https://www.facebook.com")))
+  '(menu-bar-mode nil)
+  '(tool-bar-mode nil)
+  '(mode-line-format nil))
+*** zen 3
+  '(scroll-bar-mode nil)
+  '(zen-fullscreen-mode t)
+  '(zen-encumbered-urls  (quote ( "#brief timewastes" "www.penny-arcade.com" "www.dilbert.com" "www.xkcd.com" "www.userfriendly.org" "#news waste" "slashdot.org" "dn.se" "#social timewastes" "https://www.facebook.com")))
+  '(menu-bar-mode nil)
+  '(tool-bar-mode nil)
+  '(mode-line-format nil))
+
 
 ** bugs
 *** TODO Currently Zen mode cant see the difference between a maximized
@@ -16,13 +74,25 @@ F11 means full-screen in many applications, and one zen-aspect is fullscreen.
 
  doesnt remember previous window size and position always
 
-*** TODO There are some problems in the Compiz WM, (and maybe other WM:s)
+*** CANCELLED There are some problems in the Compiz WM, (and maybe other WM:s)
+    CLOSED: [2011-08-21 Sun 13:50]
  regarding fullscreen: When selecting another workspace temporarily
  and going back, Emacs does not cover the wm panels as it should.
  This can be resolved with alt-tab a bit, but its annoying.  In
  Metacity it works well. Maybe Zen could learn to work around these
  WM:s
 
+(cancelled because it doesn't happen lately)
+*** TODO features annoyingly wind up in the user theme
+customize troubleshoot
+sometimes variables I want in the theme winds up in the customizations.
+
+also custom-enabled-themes gets out of sync:
+ '(custom-enabled-themes (quote (zen-2 tsdh-dark)))
+so, when emacs is restarted, zen-2 is set, but zen thinks the level
+ is 0.
+
+the user-theme has higher precedence than other themes which is counterintuitive.
 ** new features
 *** TODO play trance inducing track with EMMS
 I have my 
@@ -97,6 +167,7 @@ service polipo reload
 polipo can also encumber https urls but that requires a new file + a
 polipo patch entering the polipo repo soonish maybe.
 *** TODO encumbered buffers
+you can't visit particular buffers, like maybe the Gnus buffers.
 *** TODO advice some modes like ERC so as not to
   interrupt while in Zen, also dont Gnus while in Zen. You are
   supposed to concentrate :)
@@ -107,7 +178,7 @@ polipo patch entering the polipo repo soonish maybe.
  before you can begin wasting time again.
 
 *** TODO implicit zen state shifting 
-lessening neuralogical procrastenating reward. 
+lessening neurological procrastenating reward. 
 
 Its easier to describe with an example. You want to Gnus rather than
 do whatever more fruitful endeavor you are doing. Gnus is inhibited in
@@ -118,8 +189,6 @@ delay before arriwing in the Gnus buffer. Zen state is changed
 automatically after that. If you quit before the delay expires you
 stay in your current zen state.
 
-*** TODO customize troubleshoot
-sometimes variables I want in the theme winds up in the customizations.
 *** TODO anti procrastenation timer
 **** DONE [#B] emacs quick challenge timer against procrastination
    CLOSED: [2009-04-15 Wed]
@@ -136,3 +205,8 @@ to work immediately.
 
 *** TODO control erc state
 busy in higher states etc
+
+*** TODO integrate with the Neurosky Mindset 
+there is an initial attempt with (zen-neurosky)
+*** TODO set background colours
+so, in high zen, background is red for instance.

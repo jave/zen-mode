@@ -1,4 +1,4 @@
-;;; zen-mode.el --- remove/restore Emacs distractions quickly
+;;; zen-mode.el --- zen-mode helps you concentrate
 
 ;;; Copyright (C) 2008,2009,2010,2011,2012 FSF
 

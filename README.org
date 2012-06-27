@@ -100,7 +100,8 @@ I have my
 "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg")
 
 
-*** TODO more states that accumulate
+*** DONE more states that accumulate
+    CLOSED: [2012-06-27 Wed 18:57]
 *** DONE zen-more and zen-less
     CLOSED: [2011-03-17 Thu 00:16]
 *** DONE Levels of Zen-ness. Quickly enter zen with different
@@ -201,7 +202,22 @@ to work immediately.
 (require 'todochiku)
 (work-timer-start)
 
-**** TODO zen timer
+**** TODO zen timer/pommodoro timer
+     CLOCK: [2012-06-27 Wed 00:55]--[2012-06-27 Wed 01:08] =>  0:13
+     CLOCK: [2012-06-26 Tue 20:00]--[2012-06-26 Tue 20:37] =>  0:37
+The pommodoro method is very simple. You use an egtimer, and during
+the egtimers 25 minute run, you do whatever you are supposed to
+do. When the eggtimer rings, you can procrastinate for a while.
+
+I have used this method successfully with Emacs and org-mode for some
+time. (there is org-pommodoro.el, but it didnt exist when I started,
+but there was a simple Emacs timer example floating around.)
+
+I usually also enter Zen at the same time manually, but this should be
+done automaticaly. Also I might not necessarily log all pommodoros in
+org, altough neat, there is sometimes no immediately obvious org node
+to log time in, which increases the threshold for pommodoro.
+
 
 *** TODO control erc state
 busy in higher states etc
@@ -210,3 +226,5 @@ busy in higher states etc
 there is an initial attempt with (zen-neurosky)
 *** TODO set background colours
 so, in high zen, background is red for instance.
+*** TODO ELPA package
+ELPA packaging would make it easier to install the custom themes.

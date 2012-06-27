@@ -1,6 +1,6 @@
-;;; zen-mode.el --- remove/restore Emacs frame distractions quickly
+;;; zen-mode.el --- remove/restore Emacs distractions quickly
 
-;;; Copyright (C) 2008,2009,2010,2011 FSF
+;;; Copyright (C) 2008,2009,2010,2011,2012 FSF
 
 ;;Author: Joakim Verona, joakim@verona.se
 ;;License: GPL V3 or later
@@ -13,19 +13,40 @@
 ;; 2008.08.17 -- v0.1
 ;; 2009  -- v.02pre3
 ;; 2011  -- v2pre1
-
+;; 20120627 -- 20120627
 ;;; Code:
 
 ;;??
 ;;;###autoload (add-to-list 'custom-theme-load-path load-file-name)
 
-(provide 'zen-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zen v2 uses emacs custom themes which is much cleverer than the old method
 ;; but also more complex to install because you need to copy the zen themes to ~/.emacs.d
 
-(defvar zen-state 0
-  "Current zen state.  0 means no zen.  other states correspond to a theme.")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun zen-state () 
+  "Current zen state.  0 means no zen.  other states correspond to a set of themes."
+  (length (zen-active-states))
+  )
+
+
+;;todo support stackable zen states, use custom-enabled-themes for state 
+(defun zen-active-states ()
+  "return a list of curretly active zen states."
+  (delq nil (mapcar (lambda (theme) (if (memq theme custom-enabled-themes) theme nil)) zen-states)))
+
+(defcustom zen-states '(zen-1 zen-2 zen-3)
+  "the zen states.
+each state is a theme.
+the list is ordered, so zen-3 is adden on top of zen-2 and zen-1.")
+
+
+(defun zen-state-themes (state)
+  "Themes corresponding to zen STATE."
+  (delq nil (subseq zen-states 0 state))
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun zen-set-fullscreen (name state)
   "Customize setter for fullscreen.  NAME and STATE from customize."
@@ -88,48 +109,42 @@ Needs to be writable and Polipo needs to be configured to read it."
   :type '(repeat string)
   :set 'zen-set-encumber-urls)
 
-(defun zen-state-theme (state)
-  "Theme corresponding to zen STATE."
-  (intern (format "zen-%d" state)))
-
 (defun zen-set-state (new-state)
   "Which zen NEW-STATE to enter."
   (interactive "Nzen:")
-  (message "Now entering Zen %d" zen-state)  
   (if (> 0 new-state) (setq new-state 0))
-  (if (>= new-state 3)  (setq new-state 3));;TODO
+  (if (>= new-state (length zen-states))  (setq new-state (length zen-states))) ;;TODO
+  (message "Now entering Zen %d" new-state)  
   ;; 0 means a wordly state.
-  ;;other states are themes
-  (if zen-state (disable-theme (zen-state-theme zen-state)))
-  ;;  (if new-state (enable-theme (zen-state-theme new-state)))
-  ;;enable-theme doesnt work in the way I expected
+  ;;first remove the old states
+  (let ((non-zen-themes  custom-enabled-themes))
+    (mapc (lambda (el) (setq non-zen-themes (delq el non-zen-themes))) zen-states)
+    ;;enable-theme doesnt work in the way I expected
 
-  ;; this works. somewhat.
-  (if (>  new-state 0)
-      (custom-set-variables (list 'custom-enabled-themes
-                                  (list 'quote (append (list (zen-state-theme new-state)) custom-enabled-themes )) nil)))
-
-  (setq zen-state new-state)
+    ;; this works. somewhat.
+    (custom-set-variables (list 'custom-enabled-themes
+                                (list 'quote (append (zen-state-themes new-state) non-zen-themes )) nil)))
 
   )
 
 (defun zen-more ()
   "More Zen. You can do it!"
   (interactive)
-  (zen-set-state (+ 1 zen-state)))
+  (zen-set-state (+ 1 ( zen-state))))
 
 
 (defun zen-less ()
   "Less Zen. The spirit is willing but the flesh is weak."
   (interactive)
-  (zen-set-state (-  zen-state 1)))
+  (zen-set-state (-  ( zen-state) 1)))
 
 ;;keys
-;;TODO the propor way
+;;TODO the proper way
 (defun zen-keys ()
   (global-set-key (kbd "<f11> <f11>") 'zen-set-state)
   (global-set-key (kbd "<f11> m") 'zen-more)
   (global-set-key (kbd "<f11> l") 'zen-less)
+  (global-set-key (kbd "<f11> p") 'zen-pommodoro)
   )
 
 (defun zen-neurosky-filter (proc string)
@@ -160,6 +175,34 @@ Needs to be writable and Polipo needs to be configured to read it."
 
          )
     (set-process-filter neurosky-proc 'zen-neurosky-filter)))
+
+(defun zen-pommodoro ()
+  (interactive)
+  "enter your desired zen state for pommodoro.
+uses org-timer if you have it."
+
+
+  
+  ;;first enter zen TODO defcustom or something
+  (zen-set-state 2)
+  
+  ;;if we have org, we can use it
+
+  ;;change org timmer settings only for the duration of the pommodoro,
+  (cond  ((require 'org-timer nil t)
+          (let ( (org-timer-default-timer 25)
+                 (org-clock-in-hook org-clock-in-hook))
+            (add-hook 'org-clock-in-hook '(lambda ()
+                                            (if (not org-timer-current-timer) 
+                                                (org-timer-set-timer '(16)))))
+            (org-clock-in)))
+         (t (message "you dont seem to have org-timer, so I dont know how to time your pommodoro yet."))))
+;;TODO when using the org timer, and not on org item when starting, theres an error, which is annoying
+
+;;;###autoload
+(when (boundp 'custom-theme-load-path)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide 'zen-mode)
 

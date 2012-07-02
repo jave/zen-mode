@@ -1,20 +1,23 @@
 * Zen-mode overview
 zen-mode is Emacs is a concentration aid for Emacs.
 
-I bind zen-mode to f11 like this:
+Zen-mode provides different zen-states, which manage different aspects
+of Emacs and your environment.
 
-(global-set-key [f11] 'zen-set-state)
+I use F11 as a pefix key for zen-mode. My prefered bindings can be
+installed with m-x zen-keys.
 
 F11 means full-screen in many applications, and one zen-aspect is
 fullscreen.
 
-With zen-mode you bind a set of zen features to a zen state.
+With zen-mode you bind a set of zen aspects to a zen state.
 
 Here's the default keybindings:
 
 <f11> l         zen-less
 <f11> m         zen-more
 <f11> <f11>     zen-set-state
+<f11> p         zen-pommodoro
 
 So, normaly you load zen-mode, and nothing happens. Then, when you are
 ready to achieve zen, you press <f11> m. Repeat until desired state is
@@ -31,7 +34,7 @@ Zen. (Although you can cheat and embedded other applications in
 Emacs. See the Emacs Xwidget branch)
 *** zen-encumbered-urls.
 Wordly urls that you can't visit in a Zen state. I use Polipo as a
-http proxy, and Emacs creates rules for it using this feature.
+http proxy, and zen-mode creates rules for it using this feature.
 *** zen-sound-of-one-hand-clapping. 
 A sound of your choosing that helps you achieve Zen. I use a binaural
 beat mixed with the sound of the Shinkhansen train.
@@ -44,25 +47,27 @@ Various Emacs decorators that are not Zen:
 
 You can use whatever customizable variable you want.
 
-** default zen themes
-these are the default zen themes:
+** zen themes
+zen-mode has a couple of default zen themes.
+They are ordinary Emacs custom themes.
 
-*** zen 1
-  '(zen-fullscreen-mode t))
-*** zen 2
-  '(scroll-bar-mode nil)
-  '(zen-fullscreen-mode t)
-  '(zen-encumbered-urls  (quote ( "#brief timewastes" "www.penny-arcade.com" "www.dilbert.com" "www.xkcd.com" "www.userfriendly.org" "#news waste" "slashdot.org" "dn.se" "#social timewastes" "https://www.facebook.com")))
-  '(menu-bar-mode nil)
-  '(tool-bar-mode nil)
-  '(mode-line-format nil))
-*** zen 3
-  '(scroll-bar-mode nil)
-  '(zen-fullscreen-mode t)
-  '(zen-encumbered-urls  (quote ( "#brief timewastes" "www.penny-arcade.com" "www.dilbert.com" "www.xkcd.com" "www.userfriendly.org" "#news waste" "slashdot.org" "dn.se" "#social timewastes" "https://www.facebook.com")))
-  '(menu-bar-mode nil)
-  '(tool-bar-mode nil)
-  '(mode-line-format nil))
+The Zen themes are stackable, so when in zen state 3, themes zen-1
+zen-2 and zen-3 are applied.
+
+*** default zen themes
+**** zen 0
+zen-mode is disabled
+**** zen 1
+   '(zen-fullscreen-mode t))
+**** zen 2
+   '(scroll-bar-mode nil)
+   '(zen-fullscreen-mode t)
+   '(zen-encumbered-urls  (quote ( "#brief timewastes" "www.penny-arcade.com" "www.dilbert.com" "www.xkcd.com" "www.userfriendly.org" "#news waste" "slashdot.org" "dn.se" "#social timewastes" "https://www.facebook.com")))
+   '(menu-bar-mode nil)
+   '(tool-bar-mode nil)
+   '(mode-line-format nil))
+**** zen 3
+   '(mode-line-format nil))
 
 
 ** bugs
@@ -101,6 +106,7 @@ I have my
 
 
 *** DONE more states that accumulate
+stackable themes
     CLOSED: [2012-06-27 Wed 18:57]
 *** DONE zen-more and zen-less
     CLOSED: [2011-03-17 Thu 00:16]
@@ -202,7 +208,8 @@ to work immediately.
 (require 'todochiku)
 (work-timer-start)
 
-**** TODO zen timer/pommodoro timer
+**** DONE zen timer/pommodoro timer
+     CLOSED: [2012-06-28 Thu 10:37]
      CLOCK: [2012-06-27 Wed 00:55]--[2012-06-27 Wed 01:08] =>  0:13
      CLOCK: [2012-06-26 Tue 20:00]--[2012-06-26 Tue 20:37] =>  0:37
 The pommodoro method is very simple. You use an egtimer, and during
@@ -226,5 +233,7 @@ busy in higher states etc
 there is an initial attempt with (zen-neurosky)
 *** TODO set background colours
 so, in high zen, background is red for instance.
-*** TODO ELPA package
+*** DONE ELPA package
+    CLOSED: [2012-06-28 Thu 10:38]
 ELPA packaging would make it easier to install the custom themes.
+A marmalade package was made.

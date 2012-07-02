@@ -63,13 +63,21 @@ the list is ordered, so zen-3 is adden on top of zen-2 and zen-1.")
   :group 'zen-mode
   :set 'zen-set-fullscreen)
 
+(defun zen-play-file-setter (name file)
+  "play FILE, unless file is nil or the empty string."
+  (message "zen-play-file-setter :>>%s<<" file)
+  (if (or (null file) (string= file "") (not (file-exists-p file)))
+      (emms-stop)
+      (emms-play-file file))
+  (setq zen-sound-of-one-hand-clapping file))
+
 (defcustom zen-sound-of-one-hand-clapping
-  (lambda () (emms-play-file "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg"))
+  "";; "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg"
   "What does one hand clapping sound like?
 Play this sound to enter furhur into Zen."
   :group 'zen-mode
-  :type 'function ;;maybe hoox instead?
-  :set (lambda (name val) (eval val))
+  :type 'file
+  :set 'zen-play-file-setter
   )
 
 (defcustom zen-encumber-file "/etc/polipo/forbidden/zen-forbidden"
@@ -141,6 +149,7 @@ Needs to be writable and Polipo needs to be configured to read it."
 ;;keys
 ;;TODO the proper way
 (defun zen-keys ()
+  (interactive)
   (global-set-key (kbd "<f11> <f11>") 'zen-set-state)
   (global-set-key (kbd "<f11> m") 'zen-more)
   (global-set-key (kbd "<f11> l") 'zen-less)
@@ -190,6 +199,7 @@ uses org-timer if you have it."
 
   ;;change org timmer settings only for the duration of the pommodoro,
   (cond  ((require 'org-timer nil t)
+          (require 'org-clock)
           (let ( (org-timer-default-timer 25)
                  (org-clock-in-hook org-clock-in-hook))
             (add-hook 'org-clock-in-hook '(lambda ()

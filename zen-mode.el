@@ -66,10 +66,13 @@ the list is ordered, so zen-3 is adden on top of zen-2 and zen-1.")
 (defun zen-play-file-setter (name file)
   "play FILE, unless file is nil or the empty string."
   (message "zen-play-file-setter :>>%s<<" file)
+  (require 'emms)
   (if (or (null file) (string= file "") (not (file-exists-p file)))
       (emms-stop)
       (emms-play-file file))
   (setq zen-sound-of-one-hand-clapping file))
+
+;;(zen-play-file-setter "test"  "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg")
 
 (defcustom zen-sound-of-one-hand-clapping
   "";; "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg"
@@ -77,7 +80,7 @@ the list is ordered, so zen-3 is adden on top of zen-2 and zen-1.")
 Play this sound to enter furhur into Zen."
   :group 'zen-mode
   :type 'file
-  :set 'zen-play-file-setter
+;;  :set 'zen-play-file-setter ;;TODO not mature enough yet
   )
 
 (defcustom zen-encumber-file "/etc/polipo/forbidden/zen-forbidden"
@@ -150,6 +153,7 @@ Needs to be writable and Polipo needs to be configured to read it."
 ;;TODO the proper way
 (defun zen-keys ()
   (interactive)
+  (global-unset-key [f11] ) ;;emacs 24 binds F11 by default, so unbind it now
   (global-set-key (kbd "<f11> <f11>") 'zen-set-state)
   (global-set-key (kbd "<f11> m") 'zen-more)
   (global-set-key (kbd "<f11> l") 'zen-less)

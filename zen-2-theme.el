@@ -7,7 +7,6 @@
  '(zen-fullscreen-mode t)
  '(zen-encumbered-urls  (quote ( "#brief timewastes" "www.penny-arcade.com" "www.dilbert.com" "www.xkcd.com" "www.userfriendly.org" "#news waste" "slashdot.org" "dn.se" "#social timewastes" "https://www.facebook.com")))
  '(menu-bar-mode nil)
- '(tool-bar-mode nil)
- '(zen-sound-of-one-hand-clapping "/home/joakim/build_myprojs/sbagen/examples/jave/night.sbg"))
+ '(tool-bar-mode nil))
 
 (provide-theme 'zen-2)

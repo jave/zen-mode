@@ -237,3 +237,22 @@ so, in high zen, background is red for instance.
     CLOSED: [2012-06-28 Thu 10:38]
 ELPA packaging would make it easier to install the custom themes.
 A marmalade package was made.
+*** DONE [#B] kill neural reward for aimless surfing  
+     CLOSED: [2011-03-24 Thu 13:50]
+try using polipo as web proxy. it has a feature to disallow urls.
+w3m can then use direct connection. chrome or firefox won't.
+
+/etc/polipo/forbidden
+port 8123
+
+theres an interface at http://localhost:8123/polipo/status?
+
+forbiddenfile can be a directory that is scanned for files with
+rules. 
+
+zen-mode could handle enabling/disabling of distractions, thus also
+the forbidden file.
+
+
+
+Added: [2011-03-03 Thu 09:44]

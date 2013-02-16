@@ -38,7 +38,7 @@
 (defcustom zen-states '(zen-1 zen-2 zen-3)
   "the zen states.
 each state is a theme.
-the list is ordered, so zen-3 is adden on top of zen-2 and zen-1.")
+the list is ordered, so zen-3 is added on top of zen-2 and zen-1.")
 
 
 (defun zen-state-themes (state)
@@ -77,13 +77,13 @@ the list is ordered, so zen-3 is adden on top of zen-2 and zen-1.")
 (defcustom zen-sound-of-one-hand-clapping
   "";; "/home/joakim/build_myprojs/sbagen/examples/jave/ts-brain-delta-nopink.sbg"
   "What does one hand clapping sound like?
-Play this sound to enter furhur into Zen."
+Play this sound to enter furher into Zen."
   :group 'zen-mode
   :type 'file
 ;;  :set 'zen-play-file-setter ;;TODO not mature enough yet
   )
 
-(defcustom zen-encumber-file "/etc/polipo/forbidden/zen-forbidden"
+(defcustom zen-encumber-file "~/.polipo/forbidden"
   "File to store url encumberings.
 Needs to be writable and Polipo needs to be configured to read it."
   :group 'zen-mode
@@ -113,6 +113,14 @@ Needs to be writable and Polipo needs to be configured to read it."
   ;;it appears the curl call can hang because polipo can get into a bad state when the network connection changes
   ;;so theres a 15 sec timeout by default
   (call-process-shell-command zen-polipo-reload-command))
+
+(defun zen-polipo-start ()
+  "start polipo"
+  (interactive)
+  ;;zen can run polipo, rather than using the service script provided by the distro.
+  ;;this might be more convenient.
+  (start-process "zen-polipo" "*zen-polipo*" "polipo" "-c" "~/.polipo/config")
+  )
 
 (defcustom zen-encumbered-urls nil
   "Make it harder to reach urls so you remember not to go there."
@@ -212,6 +220,15 @@ uses org-timer if you have it."
             (org-clock-in)))
          (t (message "you dont seem to have org-timer, so I dont know how to time your pommodoro yet."))))
 ;;TODO when using the org timer, and not on org item when starting, theres an error, which is annoying
+
+
+(defun zen-debug-purge ()
+  ;;TODO sometimes the vars managed by zen oddly wind up in the user theme instead.
+  ;;the idea is to purge them here, but not sure how to do it atm
+  ;; mode-line-format
+  ;;zen-fullscreen-mode
+  ;;zen-encumbered-urls
+  )
 
 ;;;###autoload
 (when (boundp 'custom-theme-load-path)

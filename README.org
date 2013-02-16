@@ -169,6 +169,7 @@ privileges on Fedora(and thus probably many other distributions also)
 pgrep polipo|xargs kill -SIGUSR1
 service polipo reload
 
+curl -m 15 -d 'init-forbidden=Read%20forbidden%20file' http://localhost:8123/polipo/status?
 
 *** TODO support https encumbering
 polipo can also encumber https urls but that requires a new file + a
@@ -256,3 +257,26 @@ the forbidden file.
 
 
 Added: [2011-03-03 Thu 09:44]
+
+*** TODO zen dimensions
+I had a small prototype called now.el.
+It turned out that it was basically the same as zen, but slightly
+different. now I want to merge them somehow.
+
+Zen was to begin with just a stackable set of emacs themes. 
+
+Now was some commands that you want to run depending on what you are
+doing. So, now-at-away-wifi, sets up your laptop for being away and
+using wifi. 
+
+Zen Dimensions, then, is the unification of these ideas:
+- Zen: how concentrated you are supposed to be
+- At: where you are, and how that affects your work
+
+At is tentatively supposed to be a set of eieio classes that you can
+join to form different behaviour. so, m-x zen-at-work, sets up your
+laptop to use a 4G connection, and vpn to your private net for
+instance. This you must set up yourself, using some macros, and eieio
+inheritance.
+
+

@@ -98,6 +98,15 @@ so, when emacs is restarted, zen-2 is set, but zen thinks the level
  is 0.
 
 the user-theme has higher precedence than other themes which is counterintuitive.
+*** TODO theme load path confusion
+;;;###autoload (add-to-list 'custom-theme-load-path load-file-name)
+
+custom-theme-load-path:
+("/home/joakim/.emacs.d/jave/git/zen-mode/"
+"/home/joakim/.emacs.d/elpa/color-theme-solarized-20121209.1204/"
+custom-theme-directory t)
+
+;;;###autoload (add-to-list 'custom-theme-load-path load-file-name t)
 ** new features
 *** TODO play trance inducing track with EMMS
 I have my 
@@ -170,6 +179,18 @@ pgrep polipo|xargs kill -SIGUSR1
 service polipo reload
 
 curl -m 15 -d 'init-forbidden=Read%20forbidden%20file' http://localhost:8123/polipo/status?
+*** TODO let emacs run polipo
+its more convenient if emacs controls the polipo proxy. why?
+- its a personal proxy anyway
+- there is less hassle with permissions of configuration files
+- polipo needs to be restarted occasionally
+  - when nic changes
+  - if restart is used rather than curl when the forbidden file
+    changes, you dont need curl
+
+m-x zen-polipo-start
+should also ask restart if there already is a running instance.
+
 
 *** TODO support https encumbering
 polipo can also encumber https urls but that requires a new file + a
@@ -279,4 +300,7 @@ laptop to use a 4G connection, and vpn to your private net for
 instance. This you must set up yourself, using some macros, and eieio
 inheritance.
 
-
+tentative dimensions:
+- zen: level of allowed distractions
+- at: where you are
+- pommodoro:

@@ -17,7 +17,7 @@
 ;;; Code:
 
 ;;??
-;;;###autoload (add-to-list 'custom-theme-load-path load-file-name)
+;;;###autoload (add-to-list 'custom-theme-load-path load-file-name t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zen v2 uses emacs custom themes which is much cleverer than the old method
@@ -233,7 +233,8 @@ uses org-timer if you have it."
 ;;;###autoload
 (when (boundp 'custom-theme-load-path)
   (add-to-list 'custom-theme-load-path
-               (file-name-as-directory (file-name-directory load-file-name))))
+               (file-name-as-directory (file-name-directory load-file-name))
+               t))
 
 (provide 'zen-mode)
 

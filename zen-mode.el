@@ -119,6 +119,7 @@ Needs to be writable and Polipo needs to be configured to read it."
   (interactive)
   ;;zen can run polipo, rather than using the service script provided by the distro.
   ;;this might be more convenient.
+  (if (get-process "zen-polipo") (delete-process (get-process "zen-polipo")));;kill the polipo process if its already running
   (start-process "zen-polipo" "*zen-polipo*" "polipo" "-c" "~/.polipo/config")
   )
 

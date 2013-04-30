@@ -51,8 +51,8 @@
 (defun now--wan (start)
   (interactive "p")
   (if (eq 1 start) 
-      (shell-command "nmcli con up id 'testing'")
-    (shell-command "nmcli con down id 'testing'")))
+      (shell-command "nmcli con up id 'internet.telenor.se'")
+    (shell-command "nmcli con down id 'internet.telenor.se'")))
 
 (defun now--wifi (start)
   (interactive "p")
@@ -114,3 +114,4 @@
 
 ;where to route audio(bt, spkrs), (because the main pulseaudio gui is inconvenient)
 
+(provide 'now)

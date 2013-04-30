@@ -121,6 +121,14 @@ Needs to be writable and Polipo needs to be configured to read it."
   ;;this might be more convenient.
   (if (get-process "zen-polipo") (delete-process (get-process "zen-polipo")));;kill the polipo process if its already running
   (start-process "zen-polipo" "*zen-polipo*" "polipo" "-c" "~/.polipo/config")
+  ;;use gsettings to tell the host os to use the polipo proxy
+  ;;will overwrite your current proxy settings, so be careful!
+  ;;you can use an upstream proxy with polipo if you want to
+  (shell-command "gsettings set org.gnome.system.proxy.http enabled true") 
+  (shell-command "gsettings set org.gnome.system.proxy mode manual") 
+  (shell-command "gsettings set org.gnome.system.proxy.http host 127.0.0.1") 
+  (shell-command "gsettings set org.gnome.system.proxy.http port 3128") 
+  (shell-command "gsettings set org.gnome.system.proxy.http port 8123  ") 
   )
 
 (defcustom zen-encumbered-urls nil

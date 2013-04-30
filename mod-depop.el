@@ -22,11 +22,16 @@
 (defun mod-depop-info-string ()
   ( erc-modified-channels-update)
   (format "%s\n%s\n%s\n%s\n%s"
-          (format-time-string "%H:%M %Y-%m-%d" (current-time))
-          (battery-format battery-echo-area-format (funcall
-                                                    battery-status-function))
+          ;;i just took some random faces with list-faces-display to create angry fruit salad
+          (propertize           (format-time-string "%H:%M   %Y-%m-%d" (current-time))
+                                'face 'Info-title-1-face)
+          (propertize (battery-format battery-echo-area-format (funcall
+                                                                battery-status-function))
+                      'face 'abook-summary-modified-flag)
+          (propertize  (shell-command-to-string "nmcli   dev")
+                       'face 'change-log-email)
           (timeclock-status-string)
-          (shell-command-to-string "nmcli   dev")
+          
           (erc-modified-channels-display)
           
           ))

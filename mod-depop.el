@@ -25,9 +25,9 @@
           ;;i just took some random faces with list-faces-display to create angry fruit salad
           (propertize           (format-time-string "%H:%M   %Y-%m-%d" (current-time))
                                 'face 'Info-title-1-face)
-          (propertize (battery-format battery-echo-area-format (funcall
-                                                                battery-status-function))
-                      'face 'abook-summary-modified-flag)
+          (if battery-status-function (propertize (battery-format battery-echo-area-format (funcall
+                                                                                            battery-status-function))
+                                                  'face 'abook-summary-modified-flag))
           (propertize  (shell-command-to-string "nmcli   dev")
                        'face 'change-log-email)
           (timeclock-status-string)

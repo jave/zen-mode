@@ -92,7 +92,8 @@
       (other-window 2)
       ))
   )
-(global-set-key [f3] 'mod-depop-toggle-view)
+;;I never use the F1 help binding, so I use it for mod depop instead
+(global-set-key [f1] 'mod-depop-toggle-view)
 
 ;;;;; global info
 ;; (defun jv-global-info ()

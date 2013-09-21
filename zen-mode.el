@@ -24,21 +24,22 @@
 ;; but also more complex to install because you need to copy the zen themes to ~/.emacs.d
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun zen-state () 
+(defun zen-state ()
   "Current zen state.  0 means no zen.  other states correspond to a set of themes."
   (length (zen-active-states))
   )
 
 
-;;todo support stackable zen states, use custom-enabled-themes for state 
-(defun zen-active-states ()
-  "return a list of curretly active zen states."
-  (delq nil (mapcar (lambda (theme) (if (memq theme custom-enabled-themes) theme nil)) zen-states)))
-
 (defcustom zen-states '(zen-1 zen-2 zen-3)
-  "the zen states.
+  "The zen states.
 each state is a theme.
 the list is ordered, so zen-3 is added on top of zen-2 and zen-1.")
+
+;;todo support stackable zen states, use custom-enabled-themes for state
+(defun zen-active-states ()
+  "Return a list of curretly active zen states."
+  (delq nil (mapcar (lambda (theme) (if (memq theme custom-enabled-themes) theme nil)) zen-states)))
+
 
 
 (defun zen-state-themes (state)
@@ -64,7 +65,7 @@ the list is ordered, so zen-3 is added on top of zen-2 and zen-1.")
   :set 'zen-set-fullscreen)
 
 (defun zen-play-file-setter (name file)
-  "play FILE, unless file is nil or the empty string."
+  "NAME, Play FILE, unless file is nil or the empty string."
   (message "zen-play-file-setter :>>%s<<" file)
   (require 'emms)
   (if (or (null file) (string= file "") (not (file-exists-p file)))
@@ -115,7 +116,7 @@ Needs to be writable and Polipo needs to be configured to read it."
   (call-process-shell-command zen-polipo-reload-command))
 
 (defun zen-polipo-start ()
-  "start polipo"
+  "Start polipo."
   (interactive)
   ;;zen can run polipo, rather than using the service script provided by the distro.
   ;;this might be more convenient.
@@ -124,11 +125,11 @@ Needs to be writable and Polipo needs to be configured to read it."
   ;;use gsettings to tell the host os to use the polipo proxy
   ;;will overwrite your current proxy settings, so be careful!
   ;;you can use an upstream proxy with polipo if you want to
-  (shell-command "gsettings set org.gnome.system.proxy.http enabled true") 
-  (shell-command "gsettings set org.gnome.system.proxy mode manual") 
-  (shell-command "gsettings set org.gnome.system.proxy.http host 127.0.0.1") 
-  (shell-command "gsettings set org.gnome.system.proxy.http port 3128") 
-  (shell-command "gsettings set org.gnome.system.proxy.http port 8123  ") 
+  (shell-command "gsettings set org.gnome.system.proxy.http enabled true")
+  (shell-command "gsettings set org.gnome.system.proxy mode manual")
+  (shell-command "gsettings set org.gnome.system.proxy.http host 127.0.0.1")
+  (shell-command "gsettings set org.gnome.system.proxy.http port 3128")
+  (shell-command "gsettings set org.gnome.system.proxy.http port 8123  ")
   )
 
 (defcustom zen-encumbered-urls nil
@@ -137,12 +138,18 @@ Needs to be writable and Polipo needs to be configured to read it."
   :type '(repeat string)
   :set 'zen-set-encumber-urls)
 
+(defvar zen-boomerang-timer nil
+  "Timer used to automatically return to a desired state.")
+
 (defun zen-set-state (new-state)
   "Which zen NEW-STATE to enter."
   (interactive "Nzen:")
   (if (> 0 new-state) (setq new-state 0))
   (if (>= new-state (length zen-states))  (setq new-state (length zen-states))) ;;TODO
-  (message "Now entering Zen %d" new-state)  
+  (message "Now entering Zen %d" new-state)
+  ;;experimental "return to work in 5 minutes" feature
+  (if (and (< new-state (zen-state) ) (<  new-state 2))
+      (setq zen-boomerang-timer (run-at-time "5 min" nil 'zen-set-state (zen-state))))
   ;; 0 means a wordly state.
   ;;first remove the old states
   (let ((non-zen-themes  custom-enabled-themes))
@@ -156,19 +163,20 @@ Needs to be writable and Polipo needs to be configured to read it."
   )
 
 (defun zen-more ()
-  "More Zen. You can do it!"
+  "More Zen.  You can do it!"
   (interactive)
   (zen-set-state (+ 1 ( zen-state))))
 
 
 (defun zen-less ()
-  "Less Zen. The spirit is willing but the flesh is weak."
+  "Less Zen.  The spirit is willing but the flesh is weak."
   (interactive)
   (zen-set-state (-  ( zen-state) 1)))
 
 ;;keys
 ;;TODO the proper way
 (defun zen-keys ()
+  "Set zen keys."
   (interactive)
   (global-unset-key [f11] ) ;;emacs 24 binds F11 by default, so unbind it now
   (global-set-key (kbd "<f11> <f11>") 'zen-set-state)
@@ -178,6 +186,7 @@ Needs to be writable and Polipo needs to be configured to read it."
   )
 
 (defun zen-neurosky-filter (proc string)
+  "Neurosky filter, PROC and STRING."
   (when (buffer-live-p (process-buffer proc))
     (with-current-buffer (process-buffer proc)
       (let ((moving (= (point) (process-mark proc)))
@@ -196,6 +205,7 @@ Needs to be writable and Polipo needs to be configured to read it."
 ;;the "synapse" tool is started first, which is a BT->REST adapter
 ;; its a bit shaky still. you need to run it twice, 1st to start the adapter, 2nd to start the emacs listener
 (defun zen-neurosky ()
+  "Start Neurosky."
   (interactive)
   (let* ((synapse-proc (unless (get-process "zen-synapse")
                          (start-process-shell-command "zen-synapse" "*zen-synapse*" "/usr/bin/env python /usr/lib/python2.7/site-packages/synapse-gui.py")))
@@ -207,6 +217,7 @@ Needs to be writable and Polipo needs to be configured to read it."
     (set-process-filter neurosky-proc 'zen-neurosky-filter)))
 
 (defun zen-pommodoro ()
+  "Pommodoro for Zen."
   (interactive)
   "enter your desired zen state for pommodoro.
 uses org-timer if you have it."
@@ -224,7 +235,7 @@ uses org-timer if you have it."
           (let ( (org-timer-default-timer 25)
                  (org-clock-in-hook org-clock-in-hook))
             (add-hook 'org-clock-in-hook '(lambda ()
-                                            (if (not org-timer-current-timer) 
+                                            (if (not org-timer-current-timer)
                                                 (org-timer-set-timer '(16)))))
             (org-clock-in)))
          (t (message "you dont seem to have org-timer, so I dont know how to time your pommodoro yet."))))
@@ -232,6 +243,7 @@ uses org-timer if you have it."
 
 
 (defun zen-debug-purge ()
+  "Debug."
   ;;TODO sometimes the vars managed by zen oddly wind up in the user theme instead.
   ;;the idea is to purge them here, but not sure how to do it atm
   ;; mode-line-format

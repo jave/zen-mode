@@ -21,7 +21,7 @@
 
 (defun mod-depop-info-string ()
   ( erc-modified-channels-update)
-  (format "%s\n%s\n%s\n%s\n%s"
+  (format "%s\n%s\n%s\n%s\n%s\n%s"
           ;;i just took some random faces with list-faces-display to create angry fruit salad
           (propertize           (format-time-string "%H:%M   %Y-%m-%d" (current-time))
                                 'face 'Info-title-1-face)
@@ -33,6 +33,7 @@
           (timeclock-status-string)
           
           (erc-modified-channels-display)
+          (zen-inspect-reward)
           
           ))
 
@@ -92,8 +93,8 @@
       (other-window 2)
       ))
   )
-;;I never use the F1 help binding, so I use it for mod depop instead
-(global-set-key [f1] 'mod-depop-toggle-view)
+;;I never use the F1 help binding, so I use it for mod depop instead(in the init file)
+;;(global-set-key [f1] 'mod-depop-toggle-view)
 
 ;;;;; global info
 ;; (defun jv-global-info ()
@@ -106,3 +107,5 @@
 ;;      (pop-up-window-set-height  . 1)))
   
 ;;   (set-window-parameter (current-window) window-other-window t))
+
+(provide 'mod-depop)

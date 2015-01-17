@@ -35,6 +35,8 @@ Emacs. See the Emacs Xwidget branch)
 *** zen-encumbered-urls.
 Wordly urls that you can't visit in a Zen state. I use Polipo as a
 http proxy, and zen-mode creates rules for it using this feature.
+
+
 *** zen-sound-of-one-hand-clapping. 
 A sound of your choosing that helps you achieve Zen. I use a binaural
 beat mixed with the sound of the Shinkhansen train.
@@ -179,6 +181,14 @@ pgrep polipo|xargs kill -SIGUSR1
 service polipo reload
 
 curl -m 15 -d 'init-forbidden=Read%20forbidden%20file' http://localhost:8123/polipo/status?
+
+HOME/.polipo/config
+tunnelAllowedPorts = 1-65535
+forbiddenFile = "~/.polipo/forbidden"
+diskCacheRoot = "~/.polipo/cache/"
+#JAVE try to avoid hanging when switching nics
+#dnsNameServer = 192.168.200.5
+
 *** TODO let emacs run polipo
 its more convenient if emacs controls the polipo proxy. why?
 - its a personal proxy anyway

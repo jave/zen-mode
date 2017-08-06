@@ -4,6 +4,7 @@
 
 ;;Author: Joakim Verona, joakim@verona.se
 ;;License: GPL V3 or later
+;; License: GPL-3+
 
 ;;; Commentary:
 ;;  See README.org
